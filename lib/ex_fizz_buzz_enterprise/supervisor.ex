@@ -10,7 +10,8 @@ defmodule ExFizzBuzzEnterprise.Supervisor do
     Logger.debug "Supervisor Initializing"
     
     children = [
-      worker(ExFizzBuzzEnterprise.Worker, [], id: ExFizzBuzzEnterprise.Worker)
+      worker(ExFizzBuzzEnterprise.InputWorker, [], id: ExFizzBuzzEnterprise.InputWorker),
+      worker(ExFizzBuzzEnterprise.OutputWorker, [], id: ExFizzBuzzEnterprise.OutputWorker)
     ]
     supervise(children, strategy: :one_for_one)
   end
