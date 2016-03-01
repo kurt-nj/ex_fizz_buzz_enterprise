@@ -14,7 +14,6 @@ defmodule ExFizzBuzzEnterprise.InputWorker do
   
   def init(args) do
     Logger.debug "Input Worker Initializing"
-    #execute
     {:ok, args}
   end
   
