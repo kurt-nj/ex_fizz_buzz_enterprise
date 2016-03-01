@@ -2,7 +2,7 @@ defmodule ExFizzBuzzEnterprise.InputState do
   defstruct [start_num: 0, current_num: 0, end_num: 100]
   
   def done?(state) do
-    state.current >= state.end
+    state.current_num > state.end_num
   end
   
   def iterate(state) do

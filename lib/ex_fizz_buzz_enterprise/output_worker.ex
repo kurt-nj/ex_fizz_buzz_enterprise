@@ -20,7 +20,12 @@ defmodule ExFizzBuzzEnterprise.OutputWorker do
   end
   
   def handle_call({:output, number}, _from, state) do
-    Logger.info ExFizzBuzzEnterprise.OutputState.to_string(state, number)
+    
+    # pipes because we can
+    state
+    |> ExFizzBuzzEnterprise.OutputState.to_string(number)
+    |> Logger.info
+
     {:reply, number, state}
   end
   
