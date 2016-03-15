@@ -2,7 +2,7 @@ defmodule ExFizzBuzzEnterprise.InputWorker do
   use GenServer
   require Logger
   
-   @delay 500 # msec
+   @delay 400 # msec
     
   def start_link do
     Logger.debug "Input Worker Starting"
@@ -12,23 +12,39 @@ defmodule ExFizzBuzzEnterprise.InputWorker do
       name: __MODULE__)
   end
   
-  def init(args) do
-    Logger.debug "Input Worker Initializing"
-    execute
-    {:ok, args}
+  def start_sequence do
+    GenServer.cast(__MODULE__, :iterate)
   end
   
-  def execute do
-    GenServer.cast(__MODULE__, :next)
+  def reset(start_val, end_val) do
+    GenServer.call(__MODULE__, { :reset, 
+      %ExFizzBuzzEnterprise.InputState
+      {
+          start_num: start_val, 
+          current_num: start_val, 
+          end_num: end_val
+      }})
   end
   
-  def handle_cast(:next, state) do
+  def reset() do
+    GenServer.call(__MODULE__, { :reset, 
+      %ExFizzBuzzEnterprise.InputState{}})
+  end
+  
+  def handle_call({:reset, state}, _from, _old_state) do
+    {:reply, state, state}
+  end
+  
+  def handle_cast(:iterate, state) do
     ExFizzBuzzEnterprise.OutputWorker.output(state.current_num)
     {:noreply, ExFizzBuzzEnterprise.InputState.iterate(state), @delay}
   end
   
   def handle_info(:timeout, state) do
-    execute
+    # continue re-executing until we hit our end state
+    if !ExFizzBuzzEnterprise.InputState.done?(state) do 
+      start_sequence
+    end
     {:noreply, state}
   end
   

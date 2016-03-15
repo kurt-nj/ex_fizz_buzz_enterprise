@@ -10,17 +10,17 @@ defmodule ExFizzBuzzEnterprise.OutputWorker do
       name: __MODULE__)
   end
   
-  def init(args) do
-    Logger.debug "Output Worker Initializing"
-    {:ok, args}
-  end
-  
   def output(number) do
     GenServer.call(__MODULE__, {:output, number})
   end
   
   def handle_call({:output, number}, _from, state) do
-    Logger.info ExFizzBuzzEnterprise.OutputState.to_string(state, number)
+    
+    # pipes because we can
+    state
+    |> ExFizzBuzzEnterprise.OutputState.to_string(number)
+    |> Logger.info
+
     {:reply, number, state}
   end
   
