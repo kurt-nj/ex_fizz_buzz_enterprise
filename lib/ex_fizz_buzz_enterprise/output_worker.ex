@@ -10,11 +10,6 @@ defmodule ExFizzBuzzEnterprise.OutputWorker do
       name: __MODULE__)
   end
   
-  def init(args) do
-    Logger.debug "Output Worker Initializing"
-    {:ok, args}
-  end
-  
   def output(number) do
     GenServer.call(__MODULE__, {:output, number})
   end

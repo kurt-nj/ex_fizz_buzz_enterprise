@@ -12,12 +12,12 @@ defmodule ExFizzBuzzEnterprise.Supervisor do
     children = [
       worker(ExFizzBuzzEnterprise.InputWorker, [], id: ExFizzBuzzEnterprise.InputWorker),
       worker(ExFizzBuzzEnterprise.OutputWorker, [], id: ExFizzBuzzEnterprise.OutputWorker),
-      worker(__MODULE__, [], function: :run)  
+      worker(__MODULE__, [], function: :run_router)  
     ]
     supervise(children, strategy: :one_for_one)
   end
   
-  def run do
+  def run_router do
    { :ok, _ } = Plug.Adapters.Cowboy.http ExFizzBuzzEnterprise.Router, []
   end
   

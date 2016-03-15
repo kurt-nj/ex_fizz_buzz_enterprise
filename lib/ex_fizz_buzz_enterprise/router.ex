@@ -14,17 +14,16 @@ defmodule ExFizzBuzzEnterprise.Router do
   end
   
   get "/fizzbuzz" do
-    ExFizzBuzzEnterprise.InputWorker.update(%ExFizzBuzzEnterprise.InputState{})
-    ExFizzBuzzEnterprise.InputWorker.execute
+    ExFizzBuzzEnterprise.InputWorker.reset
+    ExFizzBuzzEnterprise.InputWorker.start_sequence
     send_resp(conn, 200, "FizzBuzzing has commenced!")
   end
   
   get "/fizzbuzz/:start_val/:end_val" do
-    ExFizzBuzzEnterprise.InputWorker.update(%ExFizzBuzzEnterprise.InputState{
-      start_num: String.to_integer(start_val), 
-      current_num: String.to_integer(start_val), 
-      end_num: String.to_integer(end_val)})
-    ExFizzBuzzEnterprise.InputWorker.execute
+    ExFizzBuzzEnterprise.InputWorker.reset(
+      String.to_integer(start_val), 
+      String.to_integer(end_val))
+    ExFizzBuzzEnterprise.InputWorker.start_sequence
     send_resp(conn, 200, "FizzBuzzing between #{start_val} and #{end_val} has commenced!")
   end
 end
